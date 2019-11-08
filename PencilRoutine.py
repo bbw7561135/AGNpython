@@ -80,16 +80,17 @@ else:
 #PA                                              =   PA.Pencil_Analysis(PD.Pencil_Data(),Orbit=None,step=10,TempSigma=True)
 PA                                              =   PA.Pencil_Analysis(
                                                     PD.Pencil_Data(),
-                                                    Orbit=30,
-                                                    step=10,
-                                                    TempSigma=True,
-                                                    Calc_Energy=True,
+                                                    Orbit=50,
+                                                    step=None,
+                                                    TempSigma=False,
+                                                    Calc_Energy=False,
                                                     Calc_Dynamics=False,
-                                                    Orbit_standard=50,
+                                                    Orbit_standard=None,
                                                     Calc_Rates_Energy=False,
-                                                    Calc_Temp=True)
+                                                    Calc_Temp=False,
+                                                    Calc_ToomreQ=True)
 
-PAP                                             =   PAP.Pencil_Post_Analysis(PD.Pencil_Data(),Orbit=30,step=10,TempSigma=True)
+#PAP                                             =   PAP.Pencil_Post_Analysis(PD.Pencil_Data(),Orbit=30,step=10,TempSigma=True)
 
 var_dir_list                                    =   PA.Make_Vars()
 
@@ -111,7 +112,8 @@ var_dir_list                                    =   PA.Make_Vars()
 #PA.pingGTM_Sigma_3D_O(var_dir_list)
 #PA.ping_LongPerihelion(var_dir_list)
 #PA.ping_LongPerihelion_10_Orbits(var_dir_list)
-PA.pingEnergy(var_dir_list)
+#PA.pingEnergy(var_dir_list)
+PA.pingToomreQ(var_dir_list)
 
 #PAP.pingContour(var_dir_list)
 #PAP.pingTorque(var_dir_list)

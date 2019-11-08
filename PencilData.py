@@ -51,7 +51,7 @@ class Pencil_Data(object):
         self.Calc_Rates_Energy = Calc_Rates_Energy
         self.ToomreQ           = Calc_ToomreQ
         	
-	Standard_Orbit=Orbit_standard
+	Standard_Orbit         = Orbit_standard
        
         if step == None:
             step= 25
@@ -162,6 +162,8 @@ class Pencil_Data(object):
         #              missing, leading to problems when plotting. This could very well be an issue with stampede
         #              removing some data on the scratch
         #
+        #   11/8/2019  Finished ToomreQ parameter issues
+        #
         #==========================================================================================================
 	
        
@@ -170,6 +172,62 @@ class Pencil_Data(object):
         print(os.getcwd())
 
         try:
+            #
+            #
+            #
+            # before anything is done, check to make sure that there are no missing vars.
+            #
+            #
+            #
+            #
+            try:
+                os.chdir('data/proc0')
+
+                var = open('varN.list','r')
+                vline=var.readlines()
+
+                temp    = []
+                store   = []
+                missing = []
+
+                for line in vline:
+                    temp.append(line)
+
+                for index in range(len(temp)):
+                    temp_string = re.search('(?<=VAR)[0-9]{0,100}', str(temp[index]))
+                    store.append(temp_string.group(0))
+
+                i=0
+                di=1
+                count = 0
+
+                for index in range(len(store)):
+                   if i == int(store[index]):
+                        i=i+di
+                   else:
+                        while i <= int(store[index]):
+                            if i == int(store[index]):
+                                i=i+di
+                            else:
+                                missing.append('missing VAR'+str(i))
+                                count = count + 1
+                                i=i+di
+                   if i == len(store):
+                        missing.append('end with :'+str(count)+' missing')
+
+                os.chdir('..')
+                os.chdir('..')
+            #
+            #
+            #
+            #
+            except:
+            #
+            #
+            #
+                print('=========')
+                print('no proc0')
+                print('=========')
 
             #======================================
             #   pc.read_var()
@@ -187,7 +245,7 @@ class Pencil_Data(object):
             N               = 50
             tmax            = t.max()
 	    #MaxOrbits      = int(round(tmax))
-	    MaxOrbits	    = 1000
+	    MaxOrbits	    = 10
 
 	    #DEBUG CALC ENERGY
 
@@ -1133,6 +1191,103 @@ class Pencil_Data(object):
             # |
             # |
             #======================================
+            # |
+            # |
+	    #======================================	
+	    if Calc_ToomreQ == True:
+                #
+                #
+                #
+                #
+                #
+
+                #======================================
+		#
+                #
+                #
+
+                Int=0
+                dInt=1
+
+                Orbit=MaxOrbits-2
+                #Orbit=1
+
+                if Calc_Energy ==True:
+                    UE_Sum = UE_Sum
+                else:
+                    UE_Sum = []
+
+                Q_part       = []
+                disk_angular = []
+                Toomre=[]
+
+                while Int <= Orbit:
+
+                    ff	 =	 pc.read_var(trimall=True,ivar=Int,magic=["TT"])
+                    TT	 =	 ff.TT
+                    ss   =       ff.ss
+                    rad	 =	 ff.x
+                    phi	 =	 ff.y
+                    uu	 =	 ff.uu
+                    ux	 =	 ff.ux
+                    uy	 =	 ff.uy
+                    rho	 =	 ff.rho
+                    i	 =	 0
+                    di	 =	 1
+                    j	 =	 0
+                    dj	 =	 1
+                    UE	 =	 []
+                    ss_R =       []
+                    dang =       []
+
+                    while j <= len(phi)-1:
+                        while i <= len(rad)-1:
+                            try:
+                                dang.append(
+                                          uy[j][j]
+                                          )
+                                UE.append(
+                                         rho[i][j]
+                                         /rad[i]
+                                         )
+                                ss_R.append(
+                                        np.exp(ss[i][j])
+                                        )
+                                i=i+di
+                            except:
+                               #out of bound
+                               i=i+di
+                        i=0
+                        j=j+dj
+                    
+                    if Calc_Energy == False:
+                        UE_Sum.append(np.mean(UE[:]))
+                    else:
+                        UE_Sum = UE_Sum
+                    Q_part.append(np.mean(ss_R[:]))
+                    disk_angular.append(np.mean(ss_R[:]))
+                    Int=Int+dInt
+
+                for part in range(len(Q_part)):
+                    Toomre.append((
+                                    Q_part[part]
+                                    *
+                                    disk_angular[part]
+                                    )
+                                  /
+                                  UE_Sum[part])
+
+	    #======================================
+            else:
+            #======================================
+                if Calc_Energy == False:
+                    UE_Sum	     = []
+                Q_part       = []
+                disk_angular = []
+                Toomre=[]
+            # |
+            # |
+	    #======================================	
 
             # Last line of all read_var processes
 
@@ -1281,6 +1436,7 @@ class Pencil_Data(object):
 		  'Dynamic':Dynamic,'Dynamic_Density':Dynamic_Density,'Dynamic_Shock':Dynamic_Shock,
 		  'Dynamic_Temperature':Dynamic_Temperature,
                   'x_grid':x_grid,'y_grid':y_grid,
+                  'Toomre':Toomre,'Q_part':Q_part,'disk_angular':disk_angular,
                   'Total_Disk_Grad':Total_Disk_Grad,'Total_Disk_Grad_Avg':Total_Disk_Grad_Avg,
                   'KE_rate':KE_rate,'UE_rate':UE_rate,'UINT_rate':UINT_rate,'OE_rate':OE_rate,
 		  'KE_error':KE_error,'UE_error':UE_error,'UINT_error':UINT_error,'OE_error':OE_error,

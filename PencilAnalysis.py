@@ -35,7 +35,8 @@ class Pencil_Analysis(object):
 		 Calc_Density=False,
 		 Calc_Energy=False,
 		 Calc_Dynamics=False,
-                 Calc_Rates_Energy=False):
+                 Calc_Rates_Energy=False,
+                 Calc_ToomreQ=False):
 
         self.Orbit              =   Orbit
 	self.Orbit_standard     =   Orbit_standard
@@ -51,6 +52,7 @@ class Pencil_Analysis(object):
 	self.Calc_Energy        =   Calc_Energy
 	self.Calc_Dynamics      =   Calc_Dynamics
         self.Calc_Rates_Energy  =   Calc_Rates_Energy
+        self.Calc_ToomreQ       =   Calc_ToomreQ
 
         logging.basicConfig(filename='Pencil_Analysis.log',
         level=logging.DEBUG,format=' %(asctime)s,%(message)s ' ,
@@ -76,6 +78,7 @@ class Pencil_Analysis(object):
 	Calc_Energy	    =   self.Calc_Energy
 	Calc_Dynamics	    =   self.Calc_Dynamics
         Calc_Rates_Energy   =   self.Calc_Rates_Energy
+        Calc_ToomreQ        =   self.Calc_ToomreQ
 
         var_dir_list        =   []
         dir_run_list        =   next(os.walk('.'))[1]
@@ -94,13 +97,120 @@ class Pencil_Analysis(object):
 			Orbit_standard=Orbit_standard,
 			Calc_Energy=Calc_Energy,
 			Calc_Dynamics=Calc_Dynamics,
-                        Calc_Rates_Energy=Calc_Rates_Energy)
+                        Calc_Rates_Energy=Calc_Rates_Energy,
+                        Calc_ToomreQ=Calc_ToomreQ)
 				) 
             data_functions.pingGit(dir_run_list[i])
             data_functions.pingTemp(dir_run_list[i])
             i=i+di
  
         return var_dir_list
+    
+    def pingToomreQ(self,data_frame):
+
+        Calc_ToomreQ        = self.Calc_ToomreQ
+
+        try: 
+            n=0
+            dn=1
+            while n <= len(data_frame)-1:
+                try:
+                    try:
+                        os.system('mkdir Pencil_Analysis')
+                        os.chdir('Pencil_Analysis')
+                    except:
+                        print('================')
+                        print('directory already found')
+                        print('================')
+                        os.chdir('Pencil_Analysis')
+                    try:
+                        print('================')
+                        print('Making Toomre plot for '+str(data_frame[n]['DirName']))
+                        print('================')
+                    except:
+                        print('================')
+                        print('Dir error')
+                        print('================')
+                        print(n)
+                        print('================')
+                        logging.basicConfig(filename='Pencil_Analysis.log',
+                        level=logging.DEBUG,format=' %(asctime)s,%(message)s ' ,
+                        datefmt=' %m/%d/%Y %I:%M:%S %p ' )
+                        logging.info('========================')
+                        logging.info(n)
+                        logging.info('========================')
+
+                    Toomre                       = data_frame[n]['Toomre']
+
+                    plt.plot(Toomre)
+
+                    #=========================
+                    #legend handles
+                    #=========================
+
+                    # use this information when adding important parameters to the run
+
+                    eccentricity                 =   data_frame[n]['eccentricity']
+                    sound_speed                  =   data_frame[n]['cs']
+                    aspect_ratio                 =   data_frame[n]['aspect_ratio']
+                    initial_pressure             =   data_frame[n]['initial_pressure']
+                    Sigma                        =   data_frame[n]['Sigma']
+                    EntropyIndex                 =   data_frame[n]['EntropyIndex']
+                    SpecificHeat                 =   data_frame[n]['SpecificHeat']
+                    rsmooth                      =   data_frame[n]['rsmooth']
+                    gamma                        =   data_frame[n]['gamma']
+                    Gamma0                       =   data_frame[n]['Gamma0']
+                    alpha                        =   data_frame[n]['alpha']
+                    beta                         =   data_frame[n]['beta']
+    
+                    DirMass                      =   data_frame[n]['par1']
+                    DirEcc                       =   (round(eccentricity[0],1))
+
+                    DirMass_patches              = mpatches.Patch(color='white',label='q :'+str(DirMass))
+                    DirEcc_patches               = mpatches.Patch(color='white',label=r'$\varepsilon$ :'+str(DirEcc))
+                    Dirsound_speed_patches       = mpatches.Patch(color='white',label='sound speed :'+str(sound_speed))
+                    Diraspect_ratio_patches      = mpatches.Patch(color='white',label='aspect_ratio :'+str(aspect_ratio))
+                    Dirinitial_pressure_patches  = mpatches.Patch(color='white',label='inital pressure :'+str(initial_pressure))
+                    DirSigma_patches             = mpatches.Patch(color='white',label=r'$\Sigma$ :'+str(Sigma))
+                    #DirEntropyIndex  = mpatches.Patch(color='white',label='Entropy Index :'+str(EntropyIndex))
+                    Dir_rsmooth_patches          = mpatches.Patch(color='white',label='potential smoothing :'+str(rsmooth))
+                    Dir_gamma_patches                    = mpatches.Patch(color='white',label=r'$\gamma$ :'+str(gamma))
+                    Dir_alpha_patches                    = mpatches.Patch(color='white',label=r'$\alpha$ :'+str(alpha))
+                    Dir_beta_patches                     = mpatches.Patch(color='white',label=r'$\beta$ :'+str(beta))
+
+                    plt.legend(handles=[DirMass_patches,
+                                        DirEcc_patches,
+                                        Dirsound_speed_patches,
+                                        Dirinitial_pressure_patches,
+                                        DirSigma_patches,
+                                        Dir_rsmooth_patches,
+                                        Dir_gamma_patches,
+                                        Dir_alpha_patches,
+                                        Dir_beta_patches],loc=2)
+
+                    #=========================
+
+                    plt.ylabel('Q eff')
+                    plt.xlabel(r'$\tau$')
+                    plt.title('mean Toomre Q eff per orbit')
+                    plt.savefig('Standard_ToomreQ_'+str(data_frame[n]['DirName'])+'.png')
+
+		    os.system('git add *.png')
+                    os.chdir('..')
+                except:
+                    print('================')
+                    print('No Toomre Data found to plot')
+                    print('================')
+                    traceback.print_exc()
+                    os.chdir('..')
+                n=n+dn        
+        except:
+            print('================')
+            print('ping ToomreQ Loop error')
+            print('================')
+            traceback.print_exc()
+            os.chdir('..')
+            return False
 
     def pingEnergy(self,data_frame):
 
