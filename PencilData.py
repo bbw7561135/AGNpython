@@ -34,7 +34,8 @@ class Pencil_Data(object):
 		 Orbit_standard=None,
 		 Calc_Energy=False,
 		 Calc_Dynamics=False,
-                 Calc_Rates_Energy=False):
+                 Calc_Rates_Energy=False,
+                 Calc_ToomreQ=False):
  
         print('================')
         print('getting vars')
@@ -48,6 +49,7 @@ class Pencil_Data(object):
 	self.Calc_Energy       = Calc_Energy
 	self.Calc_Dynamics     = Calc_Dynamics
         self.Calc_Rates_Energy = Calc_Rates_Energy
+        self.ToomreQ           = Calc_ToomreQ
         	
 	Standard_Orbit=Orbit_standard
        
@@ -64,8 +66,10 @@ class Pencil_Data(object):
         #   calculate fit parameters for analysis 
         #   calculate any extra variables
         #   include conditionals for cases where variables are Nan or problematic
+        #   regardless of whats being asked the vars will be read from the qvar.namelist
+        #   if a var is missing its going to be reported 
         #
-        #   get  time series and read_vars as a python dict for analysis
+        #   get time series and read_vars as a python dict for analysis
         #
         #===========================================================================
         #
@@ -150,6 +154,13 @@ class Pencil_Data(object):
         #              fixed Dynamics not working in isothermal runs
 	#
 	#   7/27/2019  added orbital energy for eccentric cases 
+        #
+        #   11/7/2019  Toomre Q parameter is important for discussing disk stability for AGN orbits. Its 
+        #              gonna to be useful to measure the Toomre Q parameter anyways. You should be able to 
+        #              use this in the case of self gravity or no self gravity for pencil-code
+        #              Added Check to make sure Qvars are not missing. Sometimes the number of orbits is
+        #              missing, leading to problems when plotting. This could very well be an issue with stampede
+        #              removing some data on the scratch
         #
         #==========================================================================================================
 	
