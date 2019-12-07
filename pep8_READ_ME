@@ -1,0 +1,8 @@
+https://github.com/joshuashevchuk1/AGNpython.git
+
+add syntax below into your source or bash.rc 
+for comfort. 
+
+Use this to fix tab or indentation issues.
+
+autopep8 -i my_file.py
