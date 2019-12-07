@@ -166,6 +166,12 @@ class Pencil_Data(object):
         #
         #   11/8/2019  Finished ToomreQ parameter issues
         #
+        #   12/6/2019  Used pep8 on all files, should be compatible with python3 now (tab error)
+        #              fixed some issues involving basic scripts (python3 does not want to save figures
+        #              for whatever reason).
+        #
+        #
+        #
         # ==========================================================================================================
 
         print(os.getcwd())
