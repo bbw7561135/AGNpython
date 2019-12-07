@@ -7,63 +7,62 @@ import math
 
 # Constants
 
-AU    = 1.49e13
-pc    = 3.086e18
-G     = 6.67408e-8
-Msun  = 1.99e33
-c     = 2.998e10
-yr    = 3.154e7
-k     = 1.380648e-16
+AU = 1.49e13
+pc = 3.086e18
+G = 6.67408e-8
+Msun = 1.99e33
+c = 2.998e10
+yr = 3.154e7
+k = 1.380648e-16
 
-#  Input 
+#  Input
 
-M            = 1e8*Msun    # Central super-massive black hole
+M = 1e8*Msun    # Central super-massive black hole
 
 #  Gravitational radius
 
 rg = (G/c**2) * M
 
-r0           = 1e5*rg  # Reference radius
+r0 = 1e5*rg  # Reference radius
 aspect_ratio = 0.05     # H/r (in code units this is equal to cs0)
 
 # Calculate units
 
-unit_length   = r0
-g0            = G*M
-Omega         = np.sqrt(g0)*r0**(-1.5)   #Keplerian angular frequency
-unit_time     = 1./Omega
+unit_length = r0
+g0 = G*M
+Omega = np.sqrt(g0)*r0**(-1.5)  # Keplerian angular frequency
+unit_time = 1./Omega
 unit_velocity = unit_length/unit_time
 
-print "Units" 
-print 'unit_length=',unit_length,' cm'
-print 'unit_time=',unit_time,' s'
-print 'orbital period =',2*math.pi/Omega/yr,' yrs'
-print 'unit_velocity=',unit_velocity,' cm/s'
-print 'unit_velocity/c=',unit_velocity/c
+print "Units"
+print 'unit_length=', unit_length, ' cm'
+print 'unit_time=', unit_time, ' s'
+print 'orbital period =', 2*math.pi/Omega/yr, ' yrs'
+print 'unit_velocity=', unit_velocity, ' cm/s'
+print 'unit_velocity/c=', unit_velocity/c
 
 #number_density_carbon = 100
 #hydrogen_to_carbon_ratio = 1e4
 #number_density = hydrogen_to_carbon_ratio * number_density_carbon
 
 atomic_mass_unit = 1.66054e-24
-mean_molecular_weight  = 2.5
+mean_molecular_weight = 2.5
 #unit_density =number_density * mean_molecular_weight  * atomic_mass_unit
 
-unit_density = 1e-7 #g/cm**3
+unit_density = 1e-7  # g/cm**3
 
-print 'unit_density=',unit_density,' g/cm3' 
-print " " 
+print 'unit_density=', unit_density, ' g/cm3'
+print " "
 
 H = aspect_ratio * r0   # pressure scale height
-cs = Omega * H 
+cs = Omega * H
 gamma = 1
 
-T = cs**2 * (mean_molecular_weight  * atomic_mass_unit)/gamma/k
+T = cs**2 * (mean_molecular_weight * atomic_mass_unit)/gamma/k
 
 print "Thermal quantities"
-print "Scale height H=", H/AU," AU"
+print "Scale height H=", H/AU, " AU"
 print "Sound Speed, [m/s]=", cs/1e2
 print "cs/c=", cs/c
 print "Temperature [1e6 K]=", T / 1e6
-print " " 
-
+print " "

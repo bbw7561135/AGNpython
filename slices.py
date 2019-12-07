@@ -163,11 +163,12 @@ def animate_slices(field='uu1', datadir='data/', proc=-1, extension='xz',
             manager.canvas.draw()
 
             if ifirst:
-                #print "----islice----------t---------min-------max-------delta" # Python 2
+                # print "----islice----------t---------min-------max-------delta" # Python 2
                 print("----islice----------t---------min-------max-------delta")
-            #print "%10i %10.3e %10.3e %10.3e %10.3e" \ # Python 2
-                #% (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
-            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
+            # print "%10i %10.3e %10.3e %10.3e %10.3e" \ # Python 2
+                # % (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
+            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
 
             ifirst = False
             islice += 1
@@ -279,18 +280,19 @@ def animate_multislices(field=['uu1'], datadir='data/', proc=-1,
             manager.canvas.draw()
 
             if ifirst:
-                #print "----islice----------t---------min-------max-------delta" # Python 2
+                # print "----islice----------t---------min-------max-------delta" # Python 2
                 print("----islice----------t---------min-------max-------delta")
-            #print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
-                #(islice, t, plotplane.min(), plotplane.max(), # Python 2
-                 #plotplane.max() - plotplane.min()) # Python 2
+            # print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
+                # (islice, t, plotplane.min(), plotplane.max(), # Python 2
+                # plotplane.max() - plotplane.min()) # Python 2
             print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plotplane.min(), plotplane.max(),
-                 plotplane.max() - plotplane.min()))
+                                                                          plotplane.max() - plotplane.min()))
             if outfile != "":
-                #outslice.write("%10i %10.3e %10.3e %10.3e %10.3e" % # Python 2
-                               #(islice, t, plotplane.min(), plotplane.max(), # Python 2
-                                #plotplane.max() - plotplane.min())) # Python 2
-                outslice.write("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plotplane.min(), plotplane.max(), plotplane.max() - plotplane.min()))
+                # outslice.write("%10i %10.3e %10.3e %10.3e %10.3e" % # Python 2
+                               # (islice, t, plotplane.min(), plotplane.max(), # Python 2
+                                # plotplane.max() - plotplane.min())) # Python 2
+                outslice.write("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                    islice, t, plotplane.min(), plotplane.max(), plotplane.max() - plotplane.min()))
                 outslice.write("\n")
 
             ifirst = False
@@ -396,28 +398,29 @@ def time_slices(field=['uu1'], datadir='data/', proc=-1, extension='xz',
                 plotplane += tempplane.tolist()
 
                 if ifirst:
-                    #print "----islice----------t---------min-------max-------delta" # Python 2
+                    # print "----islice----------t---------min-------max-------delta" # Python 2
                     print("----islice----------t---------min-------max-------delta")
-                #print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
-                    #(islice, t, tempplane.min(), tempplane.max(), # Python 2
-                     #tempplane.max() - tempplane.min()) # Python 2
-                print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, tempplane.min(), tempplane.max(), tempplane.max() - tempplane.min()))
+                # print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
+                    # (islice, t, tempplane.min(), tempplane.max(), # Python 2
+                    # tempplane.max() - tempplane.min()) # Python 2
+                print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                    islice, t, tempplane.min(), tempplane.max(), tempplane.max() - tempplane.min()))
                 if outfile != "":
                     outslice.write(
-                        #"%10i %10.3e %10.3e %10.3e %10.3e" % # Python 2
-                        #(islice, # Python 2
-                         #t, # Python 2
-                         #tempplane.min(), # Python 2
-                            #tempplane.max(), # Python 2
-                            #tempplane.max() - # Python 2
-                            #tempplane.min())) # Python 2
+                        # "%10i %10.3e %10.3e %10.3e %10.3e" % # Python 2
+                        # (islice, # Python 2
+                        # t, # Python 2
+                        # tempplane.min(), # Python 2
+                        # tempplane.max(), # Python 2
+                        # tempplane.max() - # Python 2
+                        # tempplane.min())) # Python 2
                         "{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
                             islice,
                             t,
                             tempplane.min(),
                             tempplane.max(),
                             tempplane.max() -
-                            tempplane.min()))                        
+                            tempplane.min()))
                     outslice.write("\n")
 
                 ifirst = False
@@ -533,11 +536,12 @@ def make_movie(field='uu1', datadir='data/', proc=-1, extension='xz',
             files.append(fname)
 
             if ifirst:
-                #print "----islice----------t---------min-------max-------delta" # Python 2
+                # print "----islice----------t---------min-------max-------delta" # Python 2
                 print("----islice----------t---------min-------max-------delta")
-            #print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
-                #(islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
-            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
+            # print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
+                # (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
+            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
 
             ifirst = False
             islice += 1
@@ -549,9 +553,10 @@ def make_movie(field='uu1', datadir='data/', proc=-1, extension='xz',
     os.system("rm _tmp*.png")
     infile.close()
 
+
 def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
-               format='native', tmin=0., tmax=1.e38, amin=0., amax=1.,
-               transform='', oldfile=False):
+                format='native', tmin=0., tmax=1.e38, amin=0., amax=1.,
+                transform='', oldfile=False):
     """
     read 2D slice files and assemble an animation in a mpg movie.
 
@@ -576,10 +581,10 @@ def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
     import sys
     from pencil.files.var import read_var
 
-    mkmvvar = read_var(trimall=True)	
-    r2d,phi2d = np.meshgrid(mkmvvar.x,mkmvvar.y)
-    x2d=r2d*np.cos(phi2d)
-    y2d=r2d*np.sin(phi2d)
+    mkmvvar = read_var(trimall=True)
+    r2d, phi2d = np.meshgrid(mkmvvar.x, mkmvvar.y)
+    x2d = r2d*np.cos(phi2d)
+    y2d = r2d*np.sin(phi2d)
 
     datadir = os.path.expanduser(datadir)
     if proc < 0:
@@ -600,11 +605,11 @@ def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
         hsize = dim.nx
         vsize = dim.ny
     if extension == 'xz':
-	print('only works for xy')
-	sys.stop
+        print('only works for xy')
+        sys.stop
     if extension == 'yz':
         print('only works for xy')
-	sys.stop
+        sys.stop
     plane = np.zeros((vsize, hsize), dtype=precision)
 
     infile = npfile(filename, endian=format)
@@ -634,7 +639,7 @@ def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
             exec('plane = plane' + transform)
 
         if t > tmin and t < tmax:
-	    ax.set_aspect('equal')
+            ax.set_aspect('equal')
             ax.cla()
             ax.contourf(x2d, y2d, plane, 256)
             fname = '_tmp%03d.png' % islice
@@ -643,11 +648,12 @@ def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
             files.append(fname)
 
             if ifirst:
-                #print "----islice----------t---------min-------max-------delta" # Python 2
+                # print "----islice----------t---------min-------max-------delta" # Python 2
                 print("----islice----------t---------min-------max-------delta")
-            #print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
-                #(islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
-            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
+            # print "%10i %10.3e %10.3e %10.3e %10.3e" % \ # Python 2
+                # (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
+            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                islice, t, plane.min(), plane.max(), plane.max() - plane.min()))
 
             ifirst = False
             islice += 1
@@ -660,11 +666,10 @@ def make_movie2(field='uu1', datadir='data/', proc=-1, extension='xz',
     infile.close()
 
 
-
 def animate_slices_multi(field='uu1', datadir1='data/', datadir2='data/', proc=-1, extension='xz',
-                   format='native', tmin=0., tmax=1.e38, wait=0.,
-                   amin=0., amax=1., transform='', oldfile=False,
-                   makemovie=False):
+                         format='native', tmin=0., tmax=1.e38, wait=0.,
+                         amin=0., amax=1., transform='', oldfile=False,
+                         makemovie=False):
     """
     read 2D slice files and assemble an animation.
     version that does this for two different runs, neat for comparrison
@@ -693,14 +698,14 @@ def animate_slices_multi(field='uu1', datadir1='data/', datadir2='data/', proc=-
         filename1 = join(datadir1, 'slice_' + field + '.' + extension)
     else:
         filename1 = join(datadir1, 'proc' + str(proc),
-                        'slice_' + field + '.' + extension)
+                         'slice_' + field + '.' + extension)
 
     datadir2 = os.path.expanduser(datadir2)
     if proc < 0:
         filename2 = join(datadir2, 'slice_' + field + '.' + extension)
     else:
         filename2 = join(datadir2, 'proc' + str(proc),
-                        'slice_' + field + '.' + extension)
+                         'slice_' + field + '.' + extension)
 
     # Read the global dimensions.
     dim = read_dim(datadir1, proc)
@@ -726,13 +731,13 @@ def animate_slices_multi(field='uu1', datadir1='data/', datadir2='data/', proc=-
     infile2 = npfile(filename2, endian=format)
 
     #ax = plt.axes()
-    #ax.set_xlabel('')
-    #ax.set_ylabel('')
-    #ax.set_ylim
-    #ax.get_xaxis().set_visible(False)
-    #ax.get_yaxis().set_visible(False)
+    # ax.set_xlabel('')
+    # ax.set_ylabel('')
+    # ax.set_ylim
+    # ax.get_xaxis().set_visible(False)
+    # ax.get_yaxis().set_visible(False)
 
-    fig, (ax1,ax2) = plt.subplots(1,2)
+    fig, (ax1, ax2) = plt.subplots(1, 2)
     #fig.suptitle('Re = 400', fontsize=20)
     image1 = ax1.imshow(plane1, vmin=amin, vmax=amax)
     image2 = ax2.imshow(plane2, vmin=amin, vmax=amax)
@@ -776,17 +781,18 @@ def animate_slices_multi(field='uu1', datadir1='data/', datadir2='data/', proc=-
 
         if t > tmin and t < tmax:
             title = 't = %11.3e' % t
-            #fig.set_title(title)
+            # fig.set_title(title)
             image1.set_data(plane1)
             image2.set_data(plane2)
             manager.canvas.draw()
 
             if ifirst:
-                #print "----islice----------t---------min-------max-------delta" # Python 2
+                # print "----islice----------t---------min-------max-------delta" # Python 2
                 print("----islice----------t---------min-------max-------delta")
-            #print "%10i %10.3e %10.3e %10.3e %10.3e" \ # Python 2
-                #% (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
-            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(islice, t, plane1.min(), plane1.max(), plane1.max() - plane1.min()))
+            # print "%10i %10.3e %10.3e %10.3e %10.3e" \ # Python 2
+                # % (islice, t, plane.min(), plane.max(), plane.max() - plane.min()) # Python 2
+            print("{0:10} {1:10.3e} {2:10.3e} {3:10.3e} {4:10.3e}".format(
+                islice, t, plane1.min(), plane1.max(), plane1.max() - plane1.min()))
 
             if(makemovie):
                 fname = '_tmp%03d.png' % islice
@@ -804,5 +810,6 @@ def animate_slices_multi(field='uu1', datadir1='data/', datadir2='data/', proc=-
     if(makemovie):
         print('Making movie animation.mpg - this make take a while')
         # SC: Not all systems use mencoder. Need to change this into ffmpeg.
-        os.system("mencoder 'mf://_tmp*.png' -mf type=png:fps=24 -ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")
+        os.system(
+            "mencoder 'mf://_tmp*.png' -mf type=png:fps=24 -ovc lavc -lavcopts vcodec=wmv2 -oac copy -o animation.mpg")
         os.system("rm _tmp*.png")
