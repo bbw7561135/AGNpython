@@ -46,7 +46,13 @@ def Calc_ToomreContour(vth, rad, phi, rho, cs):
     # return an array for Toomre Q contour to be plotted
     # TC_Array MUST be 2d in order to be plotted for a contour
     # intialize 2d array to be plotted for contour
-    x1, x2 = 256, 768;
+
+    # set grav_const to what is set in start.in
+    # for now, manually set this
+
+    grav_const=1.3e-4
+
+    x1, x2 = 64, 192;
     TC_Array = [[0 for x in range(x1)] for y in range(x2)]
     # redefine each element of TC_array with values for toomre Q
     j=0
@@ -56,15 +62,7 @@ def Calc_ToomreContour(vth, rad, phi, rho, cs):
     while j <= len(phi)-1:
         while i <= len(rad)-1:
             # append toomre Q value at that point
-            TC_Array[j][i] = (
-                            (
-                             cs
-                             *(vth[j][i])
-                             *((rad[i])**2)
-                             *(phi[j])
-                            )
-                             /(2*pi)
-                            )
+            TC_Array[j][i] = ((vth[j][i])*(cs**0.5))/(grav_const*pi*rho[j][i])
             print('working at radius:'+str(i))
             print('working at theta:'+str(j))
             i = i+di
@@ -90,8 +88,9 @@ ax.set_aspect('equal')
 ncolors=256
 PL1=ax.contourf(x2d, y2d, TC_Array,ncolors)
 
+plt.title('orbit = '+str(ivar))
 cax=plt.axes([0.85,0.1,0.075,0.8])
 cax.set_aspect(20)
 cax.set_xlabel('Q',fontsize=10)
 plt.colorbar(PL1,cax=cax)
-plt.savefig('ToomreQContour.png')
+plt.savefig('QContour.png')
