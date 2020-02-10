@@ -1,0 +1,1 @@
+/home/joshua/pencil-code/src/special/meanfield_alpm_etat.f90

@@ -1,0 +1,38 @@
+###  -*-Makefile-*-  (for Emacs)    vim:set filetype=make:  (for vim)
+###
+### Makefile for modular pencil code -- local part
+### Included by `Makefile'
+###
+
+MPICOMM             = nompicomm
+GLOBAL              = noglobal
+DIAGNOSTICS         = diagnostics
+FILE_IO             = file_io_f95
+
+HYDRO               =   hydro
+DENSITY             =   density
+ENTROPY             = noentropy
+MAGNETIC            = nomagnetic
+RADIATION           = noradiation
+PSCALAR             = nopscalar
+
+GRAVITY             = nogravity
+SELFGRAVITY         = selfgravity_pointmasses
+POISSON             = poisson_pointmasses
+FORCING             = noforcing
+SHEAR               = noshear
+
+FOURIER             = fourier_fftpack
+SHOCK               = shock_highorder
+
+#PARTICLES         =   particles_dust
+#PARTICLES_MAP	  = particles_map
+
+BORDER_PROFILES   =   border_profiles
+
+POINTMASSES       =   pointmasses_selfgravity
+
+
+INITIAL_CONDITION =   initial_condition/centrifugal_balance
+
+REAL_PRECISION    =   double

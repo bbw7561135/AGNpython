@@ -1,0 +1,1 @@
+/home/joshua/pencil-code/src/detonate.f90

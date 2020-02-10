@@ -1,0 +1,9 @@
+Revision: 8974cb4e6dfaa89dafe2d5f55f21718d66978ae4
+ M samples/2d-tests/selfgravdisk-logspirals/run.in
+ M samples/2d-tests/selfgravdisk-logspirals/src/cparam.local
+ M samples/2d-tests/selfgravdisk-logspirals/start.in
+ M samples/2d-tests/selfgravdisk-planet-dust/src/Makefile.local
+ M samples/2d-tests/selfgravdisk-planet-dust/src/cparam.local
+ M samples/2d-tests/selfgravdisk-planet-dust/start.in
+ M src/pointmasses.f90
+ M src/selfgravity_logspirals.f90

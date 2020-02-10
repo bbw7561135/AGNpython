@@ -1,0 +1,1 @@
+/home/joshua/AGN_RUNS_PC/SGD28/src/initial_condition/fluxring_cylindrical.f90

@@ -1,0 +1,1 @@
+/home/joshua/pencil-code/src/experimental/magnetic_ffreeMHDrel.f90

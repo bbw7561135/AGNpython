@@ -1,0 +1,15 @@
+# Log file of Pencil Code commands.
+# This compiles with the same parameters as last time in this directory:
+# pc_build -p
+
+# 2020-01-08 22:23:11
+/home/joshua/pencil-code/bin/pc_build --cleanall
+
+# 2020-01-08 22:23:17
+/home/joshua/pencil-code/bin/pc_build --fast
+
+# 2020-01-08 22:31:08
+/home/joshua/pencil-code/bin/pc_build --fast
+
+# 2020-01-29 21:33:20
+/home/joshua/pencil-code/bin/pc_build --cleanall

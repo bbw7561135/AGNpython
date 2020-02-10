@@ -1,0 +1,1 @@
+/home/joshua/pencil-code/src/special/meanfield_dynamo_z.f90
