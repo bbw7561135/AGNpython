@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import pencil as pc
+import pencil_old as pc
 import math
 import sys
 import traceback
@@ -170,7 +170,11 @@ class Pencil_Data(object):
         #              fixed some issues involving basic scripts (python3 does not want to save figures
         #              for whatever reason).
         #
-        #
+        #   5/4/2020   Updated python scripts for latest use of pencil code.
+        #              Changed import from pencil to pencil_old
+        #              Noticed issue with non-entropy runs for Calculating Toomre Q
+        #              Toomre Q requires gravitational constant values. Since this is NOT set in pc.read_params
+        #              The Toomre Q value has to be manually checked. 
         #
         # ==========================================================================================================
 
@@ -775,8 +779,11 @@ class Pencil_Data(object):
                     #
                     #
                     try:
-                        ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
-                        TT = ff.TT
+                        if Calc_Temp==True:
+                          ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
+                          TT = ff.TT
+                        else:
+                          ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
                         rad = ff.x
                         phi = ff.y
                         uu = ff.uu
@@ -1235,8 +1242,12 @@ class Pencil_Data(object):
 
                 while Int <= Orbit:
 
-                    ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
-                    TT = ff.TT
+                    if Calc_Temp == True:
+                      ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
+                      TT = ff.TT
+                    else:
+                      ff = pc.read_var(trimall=True,ivar=Int)
+
                     ss = ff.ss
                     rad = ff.x
                     phi = ff.y
