@@ -1222,8 +1222,43 @@ class Pencil_Data(object):
             # |
             # ======================================
             if Calc_ToomreQ == True:
-                rad_q, theta_q, rho_q = make_grid_toomre(ivar)
-                Toomre = Calc_ToomreContour(rad_q, theta_q, rho_q, cs)
+                #
+                # takes ivar (orbit from dsnap)
+                # make grid elements
+                # uncomment below if the disk is not isothermal
+                # ff=pc.read_var(trimall=True,ivar=ivar,magic=['TT'])
+                ff_q = pc.read_var(trimall=True, ivar=Orbit)
+                rad_q = ff_q.x  # disk grid points in r
+                theta_q = ff_q.y  # disk grid points in theta
+                rho_q = ff_q.rho  # disk surface density
+                #
+                pi = np.pi
+                grav_const = 1
+                #
+                nx1, nx2 = 128, 384
+                # cparam resolution. This needs to be set here
+
+                Toomre = [[0 for x in range(nx1)] for y in range(nx2)]
+                # redefine each element of TC_array with values for toomre Q
+                j = 0
+                i = 0
+                di = 1
+                dj = 1
+                while j <= len(theta_q)-1:
+                    while i <= len(rad_q)-1:
+                        # append toomre Q value at that point
+                        Toomre[j][i] = ((cs))/(grav_const*pi*rho_q[j][i])
+                        print('working at radius:'+str(i))
+                        print('working at theta:'+str(j))
+                        i = i+di
+                    print('===========================')
+                    print('moving to next theta')
+                    print('===========================')
+                    i = 0
+                    j = j+dj
+                print('===========================')
+                print('done with toomre')
+                print('===========================')
             # ======================================
 
             # Last line of all read_var processes
@@ -1597,23 +1632,23 @@ class Pencil_Data(object):
         else:
             return np.exp((-Z**2.0)/2.0)*(1.0/2.0*np.pi*i)*Mu_coef
 
-    def make_grid_toomre(Orbit):
+    def make_grid_toomre(self, Orbit):
         # takes ivar (orbit from dsnap)
         # make grid elements
         # uncomment below if the disk is not isothermal
         # ff=pc.read_var(trimall=True,ivar=ivar,magic=['TT'])
-        ff_q = pc.read_var(trimall=True, ivar=ivar)
-        rad_q = ff.x  # disk grid points in r
-        theta_q = ff.y  # disk grid points in theta
-        ux_q = ff.ux  # disk grid points in vr
-        uy_q = ff.uy  # disk grid points in vtheta
-        rho_q = ff.rho  # disk surface density
-        rad2d_q, theta2d_q = np.meshgrid(rad, theta)
-        x2d_q = rad2d*np.cos(theta2d)
-        y2d_q = rad2d*np.sin(theta2d)
+        ff_q = pc.read_var(trimall=True, ivar=Orbit)
+        rad_q = ff_q.x  # disk grid points in r
+        theta_q = ff_q.y  # disk grid points in theta
+        ux_q = ff_q.ux  # disk grid points in vr
+        uy_q = ff_q.uy  # disk grid points in vtheta
+        rho_q = ff_q.rho  # disk surface density
+        rad2d_q, theta2d_q = np.meshgrid(rad_q, theta_q)
+        x2d_q = rad2d_q*np.cos(theta2d_q)
+        y2d_q = rad2d_q*np.sin(theta2d_q)
         return rad_q, theta_q, rho_q
 
-    def Calc_ToomreContour(rad, theta, rho, cs):
+    def Calc_ToomreContour(self, rad_q, theta_q, rho_q, cs):
 
         # 5/19/2020
         # function adpated for use in pencil routine
@@ -1629,6 +1664,7 @@ class Pencil_Data(object):
         # set grav_const to what is set in start.in
         # for now, manually set this
 
+        pi = np.pi
         grav_const = 1
 
         #
@@ -1641,10 +1677,10 @@ class Pencil_Data(object):
         i = 0
         di = 1
         dj = 1
-        while j <= len(theta)-1:
-            while i <= len(rad)-1:
+        while j <= len(theta_q)-1:
+            while i <= len(rad_q)-1:
                 # append toomre Q value at that point
-                toomre[j][i] = ((cs))/(grav_const*pi*rho[j][i])
+                toomre[j][i] = ((cs))/(grav_const*pi*rho_q[j][i])
                 print('working at radius:'+str(i))
                 print('working at theta:'+str(j))
             i = i+di
@@ -1652,8 +1688,8 @@ class Pencil_Data(object):
             print('moving to next theta')
             print('===========================')
             i = 0
-            j = j+dj
-            print('===========================')
-            print('done with toomre')
-            print('===========================')
+        j = j+dj
+        print('===========================')
+        print('done with toomre')
+        print('===========================')
         return toomre

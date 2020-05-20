@@ -143,8 +143,11 @@ class Pencil_Analysis(object):
                         logging.info('========================')
 
                     Toomre = data_frame[n]['Toomre']
+                    x2d = data_frame[n]['x2d']
+                    y2d = data_frame[n]['y2d']
+                    ncolors = 256
 
-                    plt.plot(Toomre)
+                    plt.contourf(x2d, y2d, Toomre, ncolors)
 
                     # =========================
                     # legend handles
