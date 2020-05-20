@@ -50,15 +50,15 @@ def Calc_ToomreContour(vth, rad, phi, rho, cs):
     # set grav_const to what is set in start.in
     # for now, manually set this
 
-    grav_const=1.3e-4
+    grav_const = 1.3e-4
 
-    x1, x2 = 64, 192;
+    x1, x2 = 64, 192
     TC_Array = [[0 for x in range(x1)] for y in range(x2)]
     # redefine each element of TC_array with values for toomre Q
-    j=0
-    i=0
-    di=1
-    dj=1
+    j = 0
+    i = 0
+    di = 1
+    dj = 1
     while j <= len(phi)-1:
         while i <= len(rad)-1:
             # append toomre Q value at that point
@@ -76,21 +76,22 @@ def Calc_ToomreContour(vth, rad, phi, rho, cs):
         print('===========================')
     return TC_Array
 
-cs=get_params()
-x2d,y2d,vth,rad,phi,rho=make_grid(ivar)
-TC_Array=Calc_ToomreContour(vth,rad,phi,rho,cs)
+
+cs = get_params()
+x2d, y2d, vth, rad, phi, rho = make_grid(ivar)
+TC_Array = Calc_ToomreContour(vth, rad, phi, rho, cs)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
 ax.set_aspect('equal')
-#X,Y & data2D must all be the same dimesions
-ncolors=256
-PL1=ax.contourf(x2d, y2d, TC_Array,ncolors)
+# X,Y & data2D must all be the same dimesions
+ncolors = 256
+PL1 = ax.contourf(x2d, y2d, TC_Array, ncolors)
 
 plt.title('orbit = '+str(ivar))
-cax=plt.axes([0.85,0.1,0.075,0.8])
+cax = plt.axes([0.85, 0.1, 0.075, 0.8])
 cax.set_aspect(20)
-cax.set_xlabel('Q',fontsize=10)
-plt.colorbar(PL1,cax=cax)
+cax.set_xlabel('Q', fontsize=10)
+plt.colorbar(PL1, cax=cax)
 plt.savefig('QContour.png')

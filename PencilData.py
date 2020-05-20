@@ -174,7 +174,10 @@ class Pencil_Data(object):
         #              Changed import from pencil to pencil_old
         #              Noticed issue with non-entropy runs for Calculating Toomre Q
         #              Toomre Q requires gravitational constant values. Since this is NOT set in pc.read_params
-        #              The Toomre Q value has to be manually checked. 
+        #              The gravitational constant has to be manually checked.
+        #
+        #   5/19/2020  Fixed Toomre Q calculations. It should now display a reasonable Toomre Q calc("should")
+        #              Updated kernel size. It should be N=850 by default.
         #
         # ==========================================================================================================
 
@@ -254,7 +257,7 @@ class Pencil_Data(object):
 
             ts = pc.read_ts()
             t = ts.t/2*math.pi
-            N = 50
+            N = 850
             tmax = t.max()
             #MaxOrbits      = int(round(tmax))
             MaxOrbits = 10
@@ -457,6 +460,7 @@ class Pencil_Data(object):
             x_grid = []
             y_grid = []
             Init_Temp = []
+            rho = []
 
             try:
                 if Calc_Temp == True:
@@ -470,6 +474,7 @@ class Pencil_Data(object):
                     x_grid = ff.x
                     y_grid = ff.y
                     Init_Temp = ff.TT
+                    rho = ff.rho
                 else:
                     ff = pc.read_var(trimall=True, ivar=0)
                     rad = ff.x
@@ -480,6 +485,7 @@ class Pencil_Data(object):
                     y2d = rad2d*np.sin(theta2d)
                     x_grid = ff.x
                     y_grid = ff.y
+                    rho = ff.rho
             except:
                 print('================')
                 print('No var data to be found')
@@ -500,7 +506,7 @@ class Pencil_Data(object):
 
             try:
                 if Calc_Temp == True:
-                    ivar = 50
+                    ivar = Orbit
                     fv = pc.read_var(trimall=True, ivar=ivar, magic=['TT'])
                     rho_fv = fv.rho
                     temp_fv = fv.TT
@@ -513,7 +519,7 @@ class Pencil_Data(object):
                     avgshock_fv = np.mean(avgshock_fv, axis=1)
                     # print(rho_fv)
                 else:
-                    ivar = 50
+                    ivar = Orbit
                     fv = pc.read_var(trimall=True, ivar=ivar)
                     rho_fv = fv.rho
                     shock_fv = fv.shock
@@ -779,11 +785,13 @@ class Pencil_Data(object):
                     #
                     #
                     try:
-                        if Calc_Temp==True:
-                          ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
-                          TT = ff.TT
+                        if Calc_Temp == True:
+                            ff = pc.read_var(
+                                trimall=True, ivar=Int, magic=["TT"])
+                            TT = ff.TT
                         else:
-                          ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
+                            ff = pc.read_var(
+                                trimall=True, ivar=Int, magic=["TT"])
                         rad = ff.x
                         phi = ff.y
                         uu = ff.uu
@@ -1214,102 +1222,8 @@ class Pencil_Data(object):
             # |
             # ======================================
             if Calc_ToomreQ == True:
-                #
-                #
-                #
-                #
-                #
-
-                # ======================================
-                #
-                #
-                #
-
-                Int = 0
-                dInt = 1
-
-                Orbit = MaxOrbits-2
-                # Orbit=1
-
-                if Calc_Energy == True:
-                    UE_Sum = UE_Sum
-                else:
-                    UE_Sum = []
-
-                Q_part = []
-                disk_angular = []
-                Toomre = []
-
-                while Int <= Orbit:
-
-                    if Calc_Temp == True:
-                      ff = pc.read_var(trimall=True, ivar=Int, magic=["TT"])
-                      TT = ff.TT
-                    else:
-                      ff = pc.read_var(trimall=True,ivar=Int)
-
-                    ss = ff.ss
-                    rad = ff.x
-                    phi = ff.y
-                    uu = ff.uu
-                    ux = ff.ux
-                    uy = ff.uy
-                    rho = ff.rho
-                    i = 0
-                    di = 1
-                    j = 0
-                    dj = 1
-                    UE = []
-                    ss_R = []
-                    dang = []
-
-                    while j <= len(phi)-1:
-                        while i <= len(rad)-1:
-                            try:
-                                dang.append(
-                                    uy[j][j]
-                                )
-                                UE.append(
-                                    rho[i][j]
-                                    / rad[i]
-                                )
-                                ss_R.append(
-                                    np.exp(ss[i][j])
-                                )
-                                i = i+di
-                            except:
-                                # out of bound
-                                i = i+di
-                        i = 0
-                        j = j+dj
-
-                    if Calc_Energy == False:
-                        UE_Sum.append(np.mean(UE[:]))
-                    else:
-                        UE_Sum = UE_Sum
-                    Q_part.append(np.mean(ss_R[:]))
-                    disk_angular.append(np.mean(ss_R[:]))
-                    Int = Int+dInt
-
-                for part in range(len(Q_part)):
-                    Toomre.append((
-                        Q_part[part]
-                        *
-                        disk_angular[part]
-                    )
-                        /
-                        UE_Sum[part])
-
-            # ======================================
-            else:
-                # ======================================
-                if Calc_Energy == False:
-                    UE_Sum = []
-                Q_part = []
-                disk_angular = []
-                Toomre = []
-            # |
-            # |
+                rad_q, theta_q, rho_q = make_grid_toomre(ivar)
+                Toomre = Calc_ToomreContour(rad_q, theta_q, rho_q, cs)
             # ======================================
 
             # Last line of all read_var processes
@@ -1464,21 +1378,25 @@ class Pencil_Data(object):
                 'Dynamic': Dynamic, 'Dynamic_Density': Dynamic_Density, 'Dynamic_Shock': Dynamic_Shock,
                 'Dynamic_Temperature': Dynamic_Temperature,
                 'x_grid': x_grid, 'y_grid': y_grid,
-                'Toomre': Toomre, 'Q_part': Q_part, 'disk_angular': disk_angular,
+                'Toomre': Toomre, 'rad_q': rad_q, 'theta_q': theta_q, 'rho_q': rho_q,
                 'Total_Disk_Grad': Total_Disk_Grad, 'Total_Disk_Grad_Avg': Total_Disk_Grad_Avg,
                 'KE_rate': KE_rate, 'UE_rate': UE_rate, 'UINT_rate': UINT_rate, 'OE_rate': OE_rate,
                 'KE_error': KE_error, 'UE_error': UE_error, 'UINT_error': UINT_error, 'OE_error': OE_error,
                 'KE_fit': KE_fit, 'UE_fit': UE_fit, 'UINT_fit': UINT_fit, 'OE_fit': OE_fit,
-                'KE_fit_rate': KE_fit_rate, 'UE_fit_rate': UE_fit_rate, 'UINT_fit_rate': UINT_fit_rate, 'OE_fit_rate': OE_fit_rate,
+                'KE_fit_rate': KE_fit_rate, 'UE_fit_rate': UE_fit_rate, 'UINT_fit_rate': UINT_fit_rate,
+                'OE_fit_rate': OE_fit_rate,
                 'OE_Grad': OE_Grad, 'UE_Grad': UE_Grad, 'KE_Grad': KE_Grad, 'UINT_Grad': UINT_Grad,
-                'OE_Grad_Avg': OE_Grad_Avg, 'UE_Grad_Avg': UE_Grad, 'KE_Grad_Avg': KE_Grad_Avg, 'UINT_Grad_Avg': UINT_Grad_Avg,
+                'OE_Grad_Avg': OE_Grad_Avg, 'UE_Grad_Avg': UE_Grad, 'KE_Grad_Avg': KE_Grad_Avg,
+                'UINT_Grad_Avg': UINT_Grad_Avg,
                 'OE_Sum': OE_Sum, 'UE_Sum': UE_Sum, 'KE_Sum': KE_Sum, 'UINT_Sum': UINT_Sum,
                 'OE_Sum_Avg': OE_Sum_Avg, 'UE_Sum_Avg': UE_Sum_Avg, 'KE_Sum_Avg': KE_Sum_Avg,
-                'UINT_Sum_Avg': UINT_Sum_Avg, 'Total_Disk_Energy': Total_Disk_Energy, 'Total_Disk_Energy_Avg': Total_Disk_Energy_Avg,
+                'UINT_Sum_Avg': UINT_Sum_Avg, 'Total_Disk_Energy': Total_Disk_Energy,
+                'Total_Disk_Energy_Avg': Total_Disk_Energy_Avg,
                 'CN_line': CN_line, 'TTm': TTm, 'TTm_rate': TTm_rate,
                 'rad_grid': rad_grid, 'ivar': ivar, 'rho_fv': rho_fv, 'temp_fv': temp_fv, 'shock_fv': shock_fv,
                 'avgrho_fv': avgrho_fv, 'avgtemp_fv': avgtemp_fv, 'avgshock_fv': avgshock_fv,
-                'long_perihelion': long_perihelion, 'Init_Temp': Init_Temp, 'true_anomaly': true_anomaly, 'true_angle': true_angle,
+                'long_perihelion': long_perihelion, 'Init_Temp': Init_Temp, 'true_anomaly': true_anomaly,
+                'true_angle': true_angle,
                 'DGTemp_Mean': DGTemp_Mean, 'gamma': gamma, 'par1': par1, 'par2': par2,
                 'GlobalTemp_Mean': GlobalTemp_Mean, 'GTM_Sigma': GTM_Sigma, 'GTM_Sigma_O': GTM_Sigma_O,
                 'wavex': wavex, 'wavey': wavey, 'wavenumber_array': wavenumber_array, 'wavenumber_check': wavenumber_check,
@@ -1678,3 +1596,64 @@ class Pencil_Data(object):
             return 1
         else:
             return np.exp((-Z**2.0)/2.0)*(1.0/2.0*np.pi*i)*Mu_coef
+
+    def make_grid_toomre(Orbit):
+        # takes ivar (orbit from dsnap)
+        # make grid elements
+        # uncomment below if the disk is not isothermal
+        # ff=pc.read_var(trimall=True,ivar=ivar,magic=['TT'])
+        ff_q = pc.read_var(trimall=True, ivar=ivar)
+        rad_q = ff.x  # disk grid points in r
+        theta_q = ff.y  # disk grid points in theta
+        ux_q = ff.ux  # disk grid points in vr
+        uy_q = ff.uy  # disk grid points in vtheta
+        rho_q = ff.rho  # disk surface density
+        rad2d_q, theta2d_q = np.meshgrid(rad, theta)
+        x2d_q = rad2d*np.cos(theta2d)
+        y2d_q = rad2d*np.sin(theta2d)
+        return rad_q, theta_q, rho_q
+
+    def Calc_ToomreContour(rad, theta, rho, cs):
+
+        # 5/19/2020
+        # function adpated for use in pencil routine
+        # removed all previous toomreQ calculations
+        # all toomreQ calculations should now be done here
+
+        # takes grid elements,radial velocity,angular velocity,
+        # sound speed, and density
+        # return an array for Toomre Q contour to be plotted
+        # TC_Array MUST be 2d in order to be plotted for a contour
+        # intialize 2d array to be plotted for contour
+
+        # set grav_const to what is set in start.in
+        # for now, manually set this
+
+        grav_const = 1
+
+        #
+        nx1, nx2 = 128, 384
+        # cparam resolution. This needs to be set here
+
+        toomre = [[0 for x in range(nx1)] for y in range(nx2)]
+        # redefine each element of TC_array with values for toomre Q
+        j = 0
+        i = 0
+        di = 1
+        dj = 1
+        while j <= len(theta)-1:
+            while i <= len(rad)-1:
+                # append toomre Q value at that point
+                toomre[j][i] = ((cs))/(grav_const*pi*rho[j][i])
+                print('working at radius:'+str(i))
+                print('working at theta:'+str(j))
+            i = i+di
+            print('===========================')
+            print('moving to next theta')
+            print('===========================')
+            i = 0
+            j = j+dj
+            print('===========================')
+            print('done with toomre')
+            print('===========================')
+        return toomre
