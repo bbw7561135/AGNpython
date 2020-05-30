@@ -63,6 +63,7 @@ time = np.convolve(t, kernel, mode='valid')
 ecc = np.convolve(e, kernel, mode='valid')
 
 Sigmap = 1.
+
 Omegap = 1./a**1.5
 mstar = 8.35e2
 q = par.pmass[1]
