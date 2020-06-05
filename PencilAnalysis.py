@@ -25,6 +25,7 @@ class Pencil_Analysis(object):
     def __init__(self,
                  data_functions,
                  Orbit=None,
+                 MaxOrbits=None,
                  Orbit_standard=None,
                  step=None,
                  TempSigma=False,
@@ -35,12 +36,14 @@ class Pencil_Analysis(object):
                  Calc_Temp=False,
                  Calc_Density=False,
                  Calc_Energy=False,
+                 Calc_OEnergy=False,
                  Calc_Dynamics=False,
                  Calc_Rates_Energy=False,
                  Calc_ToomreQ=False):
 
         self.Orbit = Orbit
         self.Orbit_standard = Orbit_standard
+        self.MaxOrbits = MaxOrbits
         self.data_functions = data_functions
         self.dir_run_list = dir_run_list
         self.var_dir_list = var_dir_list
@@ -51,6 +54,7 @@ class Pencil_Analysis(object):
         self.Calc_Temp = Calc_Temp
         self.Calc_Density = Calc_Density
         self.Calc_Energy = Calc_Energy
+        self.Calc_OEnergy = Calc_OEnergy
         self.Calc_Dynamics = Calc_Dynamics
         self.Calc_Rates_Energy = Calc_Rates_Energy
         self.Calc_ToomreQ = Calc_ToomreQ

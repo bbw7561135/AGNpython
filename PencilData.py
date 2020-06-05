@@ -30,11 +30,13 @@ class Pencil_Data(object):
     def grepDATA(self,
                  Directory_Path,
                  Orbit=None,
+                 MaxOrbits=10,
                  Calc_Temp=False,
                  Calc_Density=False,
                  step=None,
                  Orbit_standard=None,
                  Calc_Energy=False,
+                 Calc_OEnergy=False,
                  Calc_Dynamics=False,
                  Calc_Rates_Energy=False,
                  Calc_ToomreQ=False):
@@ -49,9 +51,11 @@ class Pencil_Data(object):
         self.Calc_Density = Calc_Density
         self.Orbit_standard = Orbit_standard
         self.Calc_Energy = Calc_Energy
+        self.Calc_OEnergy = Calc_OEnergy
         self.Calc_Dynamics = Calc_Dynamics
         self.Calc_Rates_Energy = Calc_Rates_Energy
         self.ToomreQ = Calc_ToomreQ
+        self.MaxOrbits = MaxOrbits
 
         Standard_Orbit = Orbit_standard
 
@@ -179,6 +183,14 @@ class Pencil_Data(object):
         #   5/19/2020  Fixed Toomre Q calculations. It should now display a reasonable Toomre Q calc("should")
         #              Updated kernel size. It should be N=850 by default.
         #
+        #   6/5/2020   Simone's birthday is tommorrow. Happy birthday love.
+        #	       Added Calc Orbital Energy logical
+        # 	       This is seperate from all other energy calculations and requires
+        # 	       a consitency check.
+	#	       Fixed any issues with not properly using Calc Orbital Energy Logical 
+	#	       It is under Calc_OEnergy. So it is changed accordingly.
+	#	       
+        #
         # ==========================================================================================================
 
         print(os.getcwd())
@@ -260,7 +272,6 @@ class Pencil_Data(object):
             N = 850
             tmax = t.max()
             #MaxOrbits      = int(round(tmax))
-            MaxOrbits = 10
 
             # DEBUG CALC ENERGY
 
@@ -862,198 +873,199 @@ class Pencil_Data(object):
                 #
                 #
                 #
-                # get the Orbital energy
+                # get the Orbital energy if logical is matched
                 #
                 #
                 #
                 #
-                if ecc_int == 0.0:
+                # ======================================
+                if Calc_OEnergy == True:
+                    # ======================================
+                    #
+                    if ecc_int == 0.0:
 
-                    # the case is simple
+                            # the case is simple
 
-                    OE = -0.5*par1/ts.xq2
+                        OE = -0.5*par1/ts.xq2
 
-                    OE_Sum = []
+                        OE_Sum = []
 
-                    i = 0
-                    di = 1
+                        i = 0
+                        di = 1
 
-                    while i <= len(Orbit_Len)-2:
-                        OE_Sum.append(
-                            np.sum(
-                                OE[
-                                    Orbit_Len[i]:Orbit_Len[i+1]
-                                ]
-                            )
-                        )
-                        i = i+di
-                #
-                #
-                #
-                else:
-                    #
-                    #	the case is more complex
-                    #
-                    # -----------------------------------------------
-                    #
-                    #
-                    #
-                    #
-                    # ----------------------------------------------
-
-                    i = 0
-                    di = 1
-
-                    while i <= len(Orbit_Len)-2:
-                        #
-                        #
-                        #
-                        #
-
-                        TOR_Sum.append(
-                            torqtotal[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        ECC_Sum.append(
-                            ecc[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        ECC_Rate.append(
-                            ecc_rate[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        ECC_Ang.append(
-                            ecc_ang[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        SEMI_Sum.append(
-                            semi_major[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        RAD_Sum.append(
-                            radius[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        THE_Sum.append(
-                            Omega[
-                                Orbit_Len[i]
-                            ]
-                        )
-                        VEC_Sum.append(
-                            np.sqrt(
-                                radius[Orbit_Len[i]]**2
-                                +
-                                Omega[Orbit_Len[i]]**2
-                            )
-                        )
-                        i = i+di
-                    #
-                    #
-                    #
-                    # -----------------------------------------------
-                    #
-                    #
-                    #
-
-                    i = 0
-                    i = i+di
-
-                    while i <= len(FE_Sum)-1:
-                        try:
-                            WE_Sum.append(
-                                VEC_Sum[i]
-                                *
-                                FE_Sum[i])
-                            i = i+di
-                        except:
-                            #
-                            # loop error
-                            #
-                            print('loop error')
-                            i = i+di
-
-                    #
-                    #
-                    #
-                    # -----------------------------------------------
-                    #
-                    #
-                    #
-
-                    OE_Sum = []
-
-                    i = 0
-                    di = 1
-
-                    while i <= Orbit-2:
-                        #
-                        #
-                        #
-                        try:
-                            #
-                            #
-                            #
+                        while i <= len(Orbit_Len)-2:
                             OE_Sum.append(
-                                (2/WE_Sum[i])
-                                *
-                                (
-                                    (
-                                        (ECC_Rate[i]*ECC_Sum[i])
-                                        /
-                                        (1-ECC_Sum[i]**2)
-                                    )
-                                    +
-                                    (
-                                        (TOR_Sum[i])
-                                        /
-                                        (ECC_Ang[i])
-                                    )
-
-
+                                np.sum(
+                                    OE[
+                                        Orbit_Len[i]:Orbit_Len[i+1]
+                                    ]
                                 )
                             )
+                            i = i+di
+                    #
+                    #
+                    #
+                    else:
+                        #
+                        #	the case is more complex
+                        #
+                        # -----------------------------------------------
+                        #
+                        #
+                        #
+                        #
+                        # ----------------------------------------------
+                        i = 0
+                        di = 1
+                        while i <= len(Orbit_Len)-len(torqtotal)-1:
                             #
                             #
                             #
-                        except:
                             #
-                            # index error
-                            #
-                            print('loop error')
+                            TOR_Sum.append(
+                                torqtotal[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            ECC_Sum.append(
+                                ecc[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            ECC_Rate.append(
+                                ecc_rate[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            ECC_Ang.append(
+                                ecc_ang[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            SEMI_Sum.append(
+                                semi_major[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            RAD_Sum.append(
+                                radius[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            THE_Sum.append(
+                                Omega[
+                                    Orbit_Len[i]
+                                ]
+                            )
+                            VEC_Sum.append(
+                                np.sqrt(
+                                    radius[Orbit_Len[i]]**2
+                                    +
+                                    Omega[Orbit_Len[i]]**2
+                                )
+                            )
                             i = i+di
                         #
                         #
                         #
+                        # -----------------------------------------------
+                        #
+                        #
+                        #
+                        i = 0
                         i = i+di
+                        while i <= len(FE_Sum)-1:
+                            try:
+                                WE_Sum.append(
+                                    VEC_Sum[i]
+                                    *
+                                    FE_Sum[i])
+                                i = i+di
+                            except:
+                                #
+                                # loop error
+                                #
+                                print('loop error')
+                                i = i+di
+                        #
+                        #
+                        #
+                        # -----------------------------------------------
+                        #
+                        #
+                        #
+                        OE_Sum = []
+                        i = 0
+                        di = 1
+                        while i <= Orbit-2:
+                            #
+                            #
+                            #
+                            try:
+                                #
+                                #
+                                #
+                                OE_Sum.append(
+                                    (2/WE_Sum[i])
+                                    *
+                                    (
+                                        (
+                                            (ECC_Rate[i]*ECC_Sum[i])
+                                            /
+                                            (1-ECC_Sum[i]**2)
+                                        )
+                                        +
+                                        (
+                                            (TOR_Sum[i])
+                                            /
+                                            (ECC_Ang[i])
+                                        )
 
-                    # -----------------------------------------------
 
+                                    )
+                                )
+                                #
+                                #
+                                #
+                            except:
+                                #
+                                # index error
+                                #
+                                print('loop error')
+                                i = i+di
+                            #
+                            #
+                            #
+                            i = i+di
+
+                else:
+                    print('===================================')
+                    print('Orbital Energy not to be calculated')
+                    print('===================================')
+                # -----------------------------------------------
                 # gradients
-
+                # -----------------------------------------------
                 KE_Grad = np.gradient(KE_Sum[:])
                 UE_Grad = np.gradient(UE_Sum[:])
                 UINT_Grad = np.gradient(UINT_Sum[:])
-                OE_Grad = np.gradient(OE_Sum[:])
+                if Calc_OEnergy == True:
+                    OE_Grad = np.gradient(OE_Sum[:])
 
                 KE_Sum_Avg = np.convolve(KE_Sum, kernel, mode='valid')
 
                 KE_rate = np.mean(KE_Grad)
                 UE_rate = np.mean(UE_Grad)
                 UINT_rate = np.mean(UINT_Grad)
-                OE_rate = np.mean(OE_Grad)
+                if Calc_OEnergy == True:
+                    OE_rate = np.mean(OE_Grad)
 
                 # time arrays
 
                 KE_time = np.arange(0, len(KE_Sum), 1)
                 UE_time = np.arange(0, len(UE_Sum), 1)
                 UINT_time = np.arange(0, len(UINT_Sum), 1)
-                OE_time = np.arange(0, len(OE_Sum), 1)
+                if Calc_OEnergy == True:
+                    OE_time = np.arange(0, len(OE_Sum), 1)
 
                 # fits
 
@@ -1091,10 +1103,11 @@ class Pencil_Data(object):
                 i = 0
                 di = 1
 
-                while i <= len(OE_time)-1:
-                    OE_fit.append(
-                        OE_Grad[i]*np.sin(OE_Sum[i]+OE_time[i])+OE_Sum[0])
-                    i = i+di
+                if Calc_OEnergy == True:
+                    while i <= len(OE_time)-1:
+                        OE_fit.append(
+                            OE_Grad[i]*np.sin(OE_Sum[i]+OE_time[i])+OE_Sum[0])
+                        i = i+di
 
                 #
                 #
@@ -1121,31 +1134,36 @@ class Pencil_Data(object):
                 i = 0
                 di = 1
 
-                while i <= len(OE_fit)-2:
-                    dOE_fit.append((OE_fit)[i+1]-(OE_fit)[i])
-                    i = i+di
+                if Calc_OEnergy == True:
+                    while i <= len(OE_fit)-2:
+                        dOE_fit.append((OE_fit)[i+1]-(OE_fit)[i])
+                        i = i+di
 
                 KE_fit_rate = sum(dKE_fit)/len(dKE_fit)
                 UE_fit_rate = sum(dUE_fit)/len(dUE_fit)
                 UINT_fit_rate = sum(dUINT_fit)/len(dUINT_fit)
-                OE_fit_rate = sum(dOE_fit)/len(dOE_fit)
+                if Calc_OEnergy == True:
+                    OE_fit_rate = sum(dOE_fit)/len(dOE_fit)
 
                 KE_error = np.abs((KE_fit_rate-KE_rate)/KE_rate)
                 UE_error = np.abs((UE_fit_rate-UE_rate)/UE_rate)
                 UINT_error = np.abs((UINT_fit_rate-UINT_rate)/UINT_rate)
-                OE_error = np.abs((OE_fit_rate-OE_rate)/OE_rate)
+                if Calc_OEnergy == True:
+                    OE_error = np.abs((OE_fit_rate-OE_rate)/OE_rate)
 
                 # averages
 
                 KE_Sum_Avg = np.convolve(KE_Sum, kernel, mode='valid')
                 UE_Sum_Avg = np.convolve(UE_Sum, kernel, mode='valid')
                 UINT_Sum_Avg = np.convolve(UINT_Sum, kernel, mode='valid')
-                OE_Sum_Avg = np.convolve(OE_Sum, kernel, mode='valid')
+                if Calc_OEnergy == True:
+                    OE_Sum_Avg = np.convolve(OE_Sum, kernel, mode='valid')
 
                 KE_Grad_Avg = np.convolve(KE_Grad, kernel, mode='valid')
                 UE_Grad_Avg = np.convolve(UE_Grad, kernel, mode='valid')
                 UINT_Grad_Avg = np.convolve(UINT_Grad, kernel, mode='valid')
-                OE_Grad_Avg = np.convolve(OE_Grad, kernel, mode='valid')
+                if Calc_OEnergy == True:
+                    OE_Grad_Avg = np.convolve(OE_Grad, kernel, mode='valid')
 
             else:
                 #
@@ -1221,6 +1239,12 @@ class Pencil_Data(object):
             # |
             # |
             # ======================================
+
+            Toomre = []
+            rad_q = []
+            theta_q = []
+            rho_q = []
+
             if Calc_ToomreQ == True:
                 #
                 # takes ivar (orbit from dsnap)
@@ -1235,7 +1259,7 @@ class Pencil_Data(object):
                 pi = np.pi
                 grav_const = 1
                 #
-                nx1, nx2 = 128, 384
+                nx1, nx2 = 256, 768
                 # cparam resolution. This needs to be set here
 
                 Toomre = [[0 for x in range(nx1)] for y in range(nx2)]
@@ -1647,49 +1671,3 @@ class Pencil_Data(object):
         x2d_q = rad2d_q*np.cos(theta2d_q)
         y2d_q = rad2d_q*np.sin(theta2d_q)
         return rad_q, theta_q, rho_q
-
-    def Calc_ToomreContour(self, rad_q, theta_q, rho_q, cs):
-
-        # 5/19/2020
-        # function adpated for use in pencil routine
-        # removed all previous toomreQ calculations
-        # all toomreQ calculations should now be done here
-
-        # takes grid elements,radial velocity,angular velocity,
-        # sound speed, and density
-        # return an array for Toomre Q contour to be plotted
-        # TC_Array MUST be 2d in order to be plotted for a contour
-        # intialize 2d array to be plotted for contour
-
-        # set grav_const to what is set in start.in
-        # for now, manually set this
-
-        pi = np.pi
-        grav_const = 1
-
-        #
-        nx1, nx2 = 128, 384
-        # cparam resolution. This needs to be set here
-
-        toomre = [[0 for x in range(nx1)] for y in range(nx2)]
-        # redefine each element of TC_array with values for toomre Q
-        j = 0
-        i = 0
-        di = 1
-        dj = 1
-        while j <= len(theta_q)-1:
-            while i <= len(rad_q)-1:
-                # append toomre Q value at that point
-                toomre[j][i] = ((cs))/(grav_const*pi*rho_q[j][i])
-                print('working at radius:'+str(i))
-                print('working at theta:'+str(j))
-            i = i+di
-            print('===========================')
-            print('moving to next theta')
-            print('===========================')
-            i = 0
-        j = j+dj
-        print('===========================')
-        print('done with toomre')
-        print('===========================')
-        return toomre

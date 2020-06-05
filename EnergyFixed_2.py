@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pencil as pc
+import pencil_old as pc
 import math
 
 # quick set up for intervals of time
@@ -29,6 +29,11 @@ while i <= len(time)-1:
         i = i+di
     else:
         i = i+di
+
+print('===================')
+print(len(Orbit_Len))
+print('===================')
+
 # ------------------
 #
 #   Debug script to test energy iteration quickly using python
@@ -120,7 +125,7 @@ else:
     print('is not zero')
 
 Int = 0
-dInt = 1
+dInt = 5
 
 
 #
@@ -128,7 +133,7 @@ dInt = 1
 #
 
 # Orbit=MaxOrbits-2
-Orbit = 1000
+Orbit = 50
 
 #
 #
@@ -307,6 +312,9 @@ else:
 
     i = 0
     i = i+di
+
+    print(len(FE_Sum))
+    print(len(VEC_Sum))
 
     while i <= Orbit-1:
         WE_Sum.append(
