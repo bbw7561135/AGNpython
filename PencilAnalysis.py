@@ -213,6 +213,11 @@ class Pencil_Analysis(object):
 
                     # =========================
 
+                    cax = plt.axes([0.85, 0.1, 0.075, 0.8])
+                    # cax.set_label('Kelvin')
+                    cax.set_aspect(20)
+                    cax.set_ylabel('Density in code units', fontsize=10)
+
                     plt.colorbar(PL2, cax=cax)
                     plt.ylabel('Q eff')
                     plt.xlabel(r'$\tau$')
