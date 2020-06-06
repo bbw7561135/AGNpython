@@ -1702,7 +1702,8 @@ class Pencil_Analysis(object):
                         print(GlobalTemp_Mean)
                         print(TTm)
 
-                        plt.plot(time, GlobalTemp_Mean, color='purple', ls=':')
+                        plt.plot(
+                            time, (GlobalTemp_Mean[:]-GlobalTemp_Mean[0]), color='purple', ls=':')
                         plt.title('Mean disk temperature vs time')
                         plt.xlabel(r'$t/T_0$')
                         plt.ylabel('Temperature')
@@ -2337,7 +2338,8 @@ class Pencil_Analysis(object):
                             # =========================
                             # =========================
 
-                            Normalized_Temp = Dynamic_Temperature[Dynamic_Loop][:]/Init_Temp[:]
+                            Normalized_Temp = (
+                                Dynamic_Temperature[Dynamic_Loop][:]-Init_Temp[:])/Init_Temp[:]
 
                             fig, (ax1) = plt.subplots(1, 1, figsize=(10, 10))
                             fig.subplots_adjust(bottom=0.07, top=0.95)
@@ -2542,7 +2544,8 @@ class Pencil_Analysis(object):
                     if Calc_Temp == True:
                         temp_fv = data_frame[n]['temp_fv']
                         Init_Temp = data_frame[n]['Init_Temp']
-                        Normalized_Temp = temp_fv[:]/Init_Temp[:]
+                        Normalized_Temp = (
+                            temp_fv[:]-Init_Temp[:])/Init_Temp[:]
                     else:
                         temp_fv = []
                         Init_Temp = []
@@ -2639,7 +2642,8 @@ class Pencil_Analysis(object):
                         #
                         #
 
-                        Normalized_Temp = temp_fv[:]/Init_Temp[:]
+                        Normalized_Temp = (
+                            temp_fv[:]-Init_Temp[:])/Init_Temp[:]
 
                         fig, (ax1) = plt.subplots(1, 1, figsize=(20, 20))
                         fig.subplots_adjust(bottom=0.07, top=0.95)
@@ -2878,7 +2882,8 @@ class Pencil_Analysis(object):
                         #
                         #
 
-                        Normalized_Temp = temp_fv[:]/Init_Temp[:]
+                        Normalized_Temp = (
+                            temp_fv[:]-Init_Temp[:])/Init_Temp[:]
 
                         fig, (ax1) = plt.subplots(1, 1, figsize=(10, 10))
                         fig.subplots_adjust(bottom=0.07, top=0.95)
@@ -3139,7 +3144,8 @@ class Pencil_Analysis(object):
                         # =========================
                         # =========================
 
-                        Normalized_Temp = temp_fv[:]/Init_Temp[:]
+                        Normalized_Temp = (
+                            temp_fv[:]-Init_Temp[:])/Init_Temp[:]
 
                         fig, (ax1) = plt.subplots(1, 1, figsize=(10, 10))
                         fig.subplots_adjust(bottom=0.07, top=0.95)

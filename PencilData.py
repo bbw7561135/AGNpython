@@ -192,6 +192,12 @@ class Pencil_Data(object):
         #              Fixed synatx issues. Sigmap now properly calculated in case of
         #              rho0 not being 1
         #
+        #  6/6/2020    Added relative temperature calculations to all plotting
+        #              relative vales should be calculated using the following formula
+        #
+        #              (value-initial_value)/(initial_value)
+        #
+        #              worked on ToomreQ colorbar fixes
         #
         # ==========================================================================================================
 
