@@ -1,8 +1,8 @@
 import numpy as np
 import pylab as plt
-import read_ts as rts 
+import read_ts as rts
 
-#testing
+# testing
 tsfilex = "src/data/ts.ac"
 tsfiley = "../gausy_plane/src/data/ts.ac"
 tsfilez = "../gausz_plane/src/data/ts.ac"
@@ -70,5 +70,3 @@ legend.get_frame().set_facecolor('#00FFCC')
 
 
 plt.show()
-
-

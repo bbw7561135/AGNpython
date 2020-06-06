@@ -1,12 +1,12 @@
 import numpy as np
 import pylab as plt
-import read_ts as rts 
+import read_ts as rts
 
-#testing
+# testing
 tsfile = "data/ts.ac"
 ts = rts.tsdata(tsfile)
 
-#Some test plots
+# Some test plots
 plt.figure()
 plt.plot(ts.t, ts.dt, 'k-.', label='dt')
 plt.xlabel("t")
@@ -111,5 +111,3 @@ legend.get_frame().set_facecolor('#00FFCC')
 
 
 plt.show()
-
-

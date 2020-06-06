@@ -187,9 +187,11 @@ class Pencil_Data(object):
         #	       Added Calc Orbital Energy logical
         # 	       This is seperate from all other energy calculations and requires
         # 	       a consitency check.
-	#	       Fixed any issues with not properly using Calc Orbital Energy Logical 
-	#	       It is under Calc_OEnergy. So it is changed accordingly.
-	#	       
+        #	       Fixed any issues with not properly using Calc Orbital Energy Logical
+        #	       It is under Calc_OEnergy. So it is changed accordingly.
+        #              Fixed synatx issues. Sigmap now properly calculated in case of
+        #              rho0 not being 1
+        #
         #
         # ==========================================================================================================
 
@@ -404,11 +406,11 @@ class Pencil_Data(object):
             yrq2 = radius*np.sin(Omega)
             ecc_int = par.eccentricity
             #Sigmap = 1.
-	    disk_mass=25
-	    SigmaP=disk_mass*Sigma*radius**-alpha
+            disk_mass = 25
+            Sigmap = disk_mass*Sigma*radius**-alpha
             eh = eccentricity/aspect_ratio
             mstar = 1
-            twave = (mstar * aspect_ratio**4) /
+            twave = (mstar * aspect_ratio**4) / \
                 (q * Sigmap * semi_major**2 * Omegap)
             te = (twave/0.780) * (1 - 0.14*eh**2 + 0.06*eh**3)
             CN_line = ecc_int*np.exp(-t/te)
@@ -1298,7 +1300,7 @@ class Pencil_Data(object):
             #
             # ======================================
 
-            #twave = Mstar * aspect_ratio**4 / \
+            # twave = Mstar * aspect_ratio**4 / \
             #    (q*Sigma * semi_major**2 * Omegap)
             #eh              = eccentricity/aspect_ratio
             #CN2008_te       = twave/0.780 * ( 1 - 0.14*eh**2 + 0.06*eh**3)
