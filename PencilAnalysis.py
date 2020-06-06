@@ -2090,7 +2090,7 @@ class Pencil_Analysis(object):
                              ['torqext'], '--', label='Outer')
                     ax1.plot(data_frame[n]['time'], data_frame[n]
                              ['torqtotal'], label='Total')
-                    ax1.plot(data_frame[n]['time'], data_frame[n]['tanaka_array'],
+                    ax1.plot(data_frame[n]['time'], data_frame[n]['tanaka'],
                              linestyle=':', label='Tanaka et  al. 2002')
                     ax1.set_aspect('auto')
                     plt.xlim([0, data_frame[n]['tmax']])

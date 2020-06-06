@@ -403,12 +403,14 @@ class Pencil_Data(object):
             xrq2 = radius*np.cos(Omega)
             yrq2 = radius*np.sin(Omega)
             ecc_int = par.eccentricity
-            Sigmap = 1.
+            #Sigmap = 1.
+	    disk_mass=25
+	    SigmaP=disk_mass*Sigma*radius**-alpha
             eh = eccentricity/aspect_ratio
-            mstar = 8.35e2
-            twave = mstar * aspect_ratio**4 / \
+            mstar = 1
+            twave = (mstar * aspect_ratio**4) /
                 (q * Sigmap * semi_major**2 * Omegap)
-            te = twave/0.780 * (1 - 0.14*eh**2 + 0.06*eh**3)
+            te = (twave/0.780) * (1 - 0.14*eh**2 + 0.06*eh**3)
             CN_line = ecc_int*np.exp(-t/te)
             ecc = eccentricity
             ecc_int = par.eccentricity
@@ -1296,8 +1298,8 @@ class Pencil_Data(object):
             #
             # ======================================
 
-            twave = Mstar * aspect_ratio**4 / \
-                (q*Sigma * semi_major**2 * Omegap)
+            #twave = Mstar * aspect_ratio**4 / \
+            #    (q*Sigma * semi_major**2 * Omegap)
             #eh              = eccentricity/aspect_ratio
             #CN2008_te       = twave/0.780 * ( 1 - 0.14*eh**2 + 0.06*eh**3)
             tanaka = (-0.85 - alpha - 0.9*beta)*Gamma0
