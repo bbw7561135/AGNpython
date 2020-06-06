@@ -151,7 +151,11 @@ class Pencil_Analysis(object):
                     y2d = data_frame[n]['y2d']
                     ncolors = 256
 
-                    plt.contourf(x2d, y2d, Toomre, ncolors)
+                    fig, (ax1) = plt.subplots(1, 1, figsize=(10, 10))
+                    fig.subplots_adjust(bottom=0.07, top=0.95)
+                    PL2 = ax1.contourf(x2d, y2d, Toomre, ncolors)
+                    ax1.set_aspect('equal')
+                    #plt.contourf(x2d, y2d, Toomre, ncolors)
 
                     # =========================
                     # legend handles
@@ -209,6 +213,7 @@ class Pencil_Analysis(object):
 
                     # =========================
 
+                    plt.colorbar(PL2, cax=cax)
                     plt.ylabel('Q eff')
                     plt.xlabel(r'$\tau$')
                     plt.title('mean Toomre Q eff per orbit')
