@@ -14,7 +14,7 @@ def plot_CN08_SEMI(e0):
     sigma0 = 2e-3
     alpha = 0.5
     mstar = 1
-    q = 5e-1
+    q = 2.4e-11
     aspect_ratio = 0.05
     eh = e0/aspect_ratio
     ap0 = 1
@@ -30,7 +30,7 @@ def plot_CN08_SEMI(e0):
 
 def plot_CN08(e0):
     disk_mass = 62
-    t = np.arange(0, 500, 0.1)
+    t = np.arange(0, 350, 0.1)
     ap0 = 1
     ap = (-0.001)*t+ap0
     Omegap = 1./ap**1.5
@@ -60,8 +60,8 @@ def plot_powerlaw(e0):
 
 
 for index in range(len(e0)):
-    plot_CN08_SEMI(e0[index])
-    # plot_CN08(e0[index])
+    # plot_CN08_SEMI(e0[index])
+    plot_CN08(e0[index])
 
 plt.legend()
 plt.savefig('EC08_CHECK.png')
