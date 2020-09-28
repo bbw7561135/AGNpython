@@ -38,7 +38,7 @@ def plot_CN08(e0):
     alpha = 0.5
     Sigmap = (sigma0*(disk_mass))*ap**-alpha
     mstar = 1
-    q = 5e-6
+    q = 1e-5
     aspect_ratio = 0.05
     eh = e0/aspect_ratio
     twave = (mstar * aspect_ratio**4) / (q * Sigmap * ap**2 * Omegap)
