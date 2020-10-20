@@ -1,0 +1,158 @@
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
++==========================================================
+Pencil Data over view
++==========================================================
+------------------------------------------------------------------------
+
+These sets of scripts are primarily used for California State University, Northridge 
+Black hole research project. The main feature is ease of personal data analysis. 
+Pencil code is the primary software used for analysis. It is a 6th order partial differential equation solver used for scientific purposes. These sets of scripts can be considered a 
+"wrapper" for data analysis in numerical post processing.
+
+------------------------------------------------------------------------
++==========================================================
+Seting up a run
++==========================================================		
+------------------------------------------------------------------------
+
+Please go to http://pencil-code.nordita.org/ 
+for information on setting up a pencil-code run. 
+
+To download the latest pencil code version use the following command:
+
+/
+git clone https://github.com/pencil-code/pencil-code.git
+/
+
+Once cloned to desktop; Follow the pencil code manual and make sure installation and 
+dependencies are working properly.
+
+To use a relevant simulation , use the following path
+
+/
+~/pencil-code/samples/2d-tests/selfgravitydisk-logspirals.
+/
+
+Copy the simulation locally in a seperate folder.
+
+eg:
+
+simulation_test/selfgravitydisk-logspirals-copy.
+
+Copy all python scripts from AGNpython into "simulation_test" or whatever folder name you want.
+
+Once the scripts are in place you are ready to begin analysis.
+
+Note:
+
+You must run the simulations for a certain amount of time. 
+In the start.in file you will see dsnap = 6.284 ~ 2 *pi. For every t*2*pi iterations, your simulation will create a snapshot 
+of the current physical situation and store observables to each proccessor on a data folder. 
+In order to get the python analysis framework to work correctly you must have a minimum of 5 orbits. 
+
+------------------------------------------------------------------------
++==========================================================
+Running the entry points
++==========================================================		
+------------------------------------------------------------------------
+
+There is 1 entry point script
+
+PencilRoutine.py
+
+and 2 dependicines already in AGNpython
+
+PencilData.py
+PencilAnalysis.py
+
+Many of the options in both of these scripts are set for personal analysis.
+As such, if you have questions on there mechanics, please contact me at 
+joshuashevchuk@gmail.com.
+
+All pencil-code variables exported in python (var and timeseries) are aquired using PencilData.py
+To add new physics to the PencilData.py
+
+Add a new variable to compute with your name and date of creation. 
+
+Add this variable to a the vars_dict dictonary at the end of the script. 
+It should be in the format standard to any python dictionary. 
+
+----------------
+
+eg.
+
+test = "Hello World"
+
+vars_dict={"all other variables":all other variables,
+	   "test":test}
+
+----------------
+
+The next script in order is PencilAnalysis.py
+Once all variables are appended to the vars_dict, PencilAnalysis will perform any number of selected
+analysis functions. The information for vars_dict is stored in a new variable called
+
+/
+data_frame
+/
+
+This data_frame object is dependent on each simulation you want to analyze. 
+
+----------------
+
+For example:
+
+if you have 2 simulations with varying start.in files where iprimary=1e-5 and iprimary=1e-6,
+data_frame[0]['q']=1e-5 and data_frame[1]['q']=1e-6.
+
+if the physical quantity you want to analyze is a time series you might get an array, then
+
+data_frame[0]['t'][:]=[t10...tf0] and data_frame[1]['t'][:]=[t20...t2f]
+
+----------------
+
+Lets say you want to access your variable test.
+
+Simply create a new function with the PencilAnalysis Class 
+and carry over the data_frame object
+
+def test(self, data_frame):
+	# 
+	print('function properly accessed')
+	test=data_frame[n]['test']
+	# in this case n is the number of directories(simulations) in your simulations folder.
+	print(test)
+
+Next we move on to the PencilRoutine.py phase.
+This is the script you run to get the analyse routine to start working.
+
+----------------
+
+eg;
+
+ipython PencilRoutine.py
+
+or 
+
+python3 PencilRoutine.py
+
+----------------
+
+To access your test function simply call it within the script
+
+(you will notice many calls to PencilAnalysis commented out. 
+For testing purposes, comment out everything expect your test function call).
+
+PA.test(var_dir_list)
+
+The var_dir_list variable will be populated in pencil-analysis as pencil-analysis will call pencil-data to fill up the dictionary.
+
+Upon calling PA.test(var_dir_list) 
+
+The PencilAnalysis script will search for the function test after filling the data_frame dictionary from PencilData.
+Then it shall perform the function just like any other python class. 
+
+Most of the functions in PencilAnalysis are written for personal analysis. If you have any questions on the mechanics for each 
+function, please contact me at joshuashevchuk@gmail.com
+
+
